@@ -7,7 +7,7 @@
         public static void Main(string[] args)
         {
             Spy spy = new Spy();
-            string result = spy.AnalyzeAcessModifiers("Hacker");
+            string result = spy.RevealPrivateMethods("Hacker");
             Console.WriteLine(result);
             
         }
