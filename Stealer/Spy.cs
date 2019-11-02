@@ -23,5 +23,28 @@
             }
             return sb.ToString().Trim();
         }
+
+        public string AnalyzeAcessModifiers(string className)
+        {
+            Type classType = Type.GetType($"{Assembly.GetExecutingAssembly().GetName().Name}.{className}");
+            var classFields = classType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static);
+            var classPublicMethods = classType.GetMethods(BindingFlags.Instance | BindingFlags.Public);
+            var classNonPublicMethods = classType.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var field in classFields)
+            {
+                sb.AppendLine($"{field.Name} must be private!");
+            }
+            foreach (var method in classPublicMethods.Where(m=>m.Name.StartsWith("get")))
+            {
+                sb.AppendLine($"{method.Name} have to be public!");
+            }
+            foreach (var method in classPublicMethods.Where(m => m.Name.StartsWith("set")))
+            {
+                sb.AppendLine($"{method.Name} have to be private!");
+            }
+            return sb.ToString().Trim();
+        }
     }
 }
